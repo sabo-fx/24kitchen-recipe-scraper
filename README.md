@@ -3,13 +3,66 @@
 Download recipes from [24kitchen.nl](https://www.24kitchen.nl/) and render them
 as nicely formatted A4 PDFs.
 
-The scraper reads the recipe's embedded JSON-LD plus a few HTML fragments
-(summary, ingredient sections, equipment, preparation steps) and lays everything
-out with [ReportLab](https://www.reportlab.com/): hero image, orange meta bar
-(porties / voorbereiden / oventijd / wachttijd), boxed ingredient cards and
-numbered preparation steps per section.
+Both paths read the recipe's embedded JSON-LD plus a few HTML fragments
+(summary, ingredient sections, equipment, preparation steps) and produce the
+same A4 layout: hero image, orange meta bar (porties / voorbereiden /
+oventijd / wachttijd), boxed ingredient cards and numbered preparation steps
+per section.
 
-## Requirements
+- **Microsoft Edge extension** for one-off recipes straight from the browser.
+- **PowerShell + Python pipeline** (using [ReportLab](https://www.reportlab.com/))
+  for batch / bulk processing of a URL list.
+
+## Edge extension (recommended)
+
+The easiest way to grab a single recipe is the bundled Microsoft Edge
+extension in `edge-extension/`. It injects a **Download als PDF** button on
+every `24kitchen.nl/recepten/...` page, opens a print-styled A4 layout that
+mirrors the ReportLab output, and lets the browser save it with
+**"Opslaan als PDF"**.
+
+### Install (unpacked)
+
+1. Open `edge://extensions` in Microsoft Edge.
+2. Toggle **Developer mode** on (bottom-left).
+3. Click **Load unpacked** and select the `edge-extension/` folder from this
+   repository.
+4. The extension is now active for `https://www.24kitchen.nl/*`.
+
+### Use
+
+1. Open any recipe page, e.g.
+   `https://www.24kitchen.nl/recepten/boeuf-bourguignon-met-shiitakes-en-szechuan`.
+2. Click the orange **Download als PDF** button in the bottom-right corner.
+3. A new tab opens with the formatted recipe and Edge's print dialog appears
+   automatically. Pick **Save as PDF** as the destination and save the file.
+   The default filename matches the PowerShell output (`24kitchen-<slug>.pdf`).
+
+No data leaves your machine: the extension only reads the recipe page you are
+viewing and stores the extracted data briefly in `chrome.storage.local` while
+the print tab opens.
+
+### Running the extension tests
+
+The extension has a Node-based smoke test that validates the DOM-extraction
+logic against synthetic recipe fixtures (no Edge required):
+
+```powershell
+cd edge-extension
+npm install
+npm test
+```
+
+Requires Node.js 18+ (uses `node:test` plus `jsdom` as a dev dependency).
+
+## Batch / bulk processing (Python pipeline)
+
+For converting many recipes in one go — for example seeding an offline
+cookbook from a long list of URLs — use the PowerShell + Python pipeline. It
+downloads each recipe's HTML and hero image and renders the PDF without
+opening a browser.
+
+### Requirements
 
 - **Windows** with **PowerShell 5.1+** (the wrapper script is `.ps1`).
 - **Python 3.12+** with the following packages available on `sys.path`:
@@ -28,7 +81,7 @@ numbered preparation steps per section.
   Alternatively you can vendor the dependencies into `data/pydeps/` (that path
   is gitignored) and point Python at it, e.g. by setting `PYTHONPATH`.
 
-## Usage
+### Usage
 
 1. Put one recipe URL per line in `recipe-urls.txt` (lines starting with `#`
    and blank lines are ignored). An example file is included.
@@ -79,48 +132,6 @@ python .\data\render_recipe_pdf.py `
   --logo .\logo.png `
   --output .\recipe.pdf
 ```
-
-## Edge extension
-
-For one-off recipes you can use the bundled Microsoft Edge extension in
-`edge-extension/` instead of running the PowerShell pipeline. It injects a
-**Download als PDF** button on every `24kitchen.nl/recepten/...` page, opens a
-print-styled A4 layout that mirrors the ReportLab output, and lets the browser
-save it with **"Opslaan als PDF"**.
-
-### Install (unpacked)
-
-1. Open `edge://extensions` in Microsoft Edge.
-2. Toggle **Developer mode** on (bottom-left).
-3. Click **Load unpacked** and select the `edge-extension/` folder from this
-   repository.
-4. The extension is now active for `https://www.24kitchen.nl/*`.
-
-### Use
-
-1. Open any recipe page, e.g.
-   `https://www.24kitchen.nl/recepten/boeuf-bourguignon-met-shiitakes-en-szechuan`.
-2. Click the orange **Download als PDF** button in the bottom-right corner.
-3. A new tab opens with the formatted recipe and Edge's print dialog appears
-   automatically. Pick **Save as PDF** as the destination and save the file.
-   The default filename matches the PowerShell output (`24kitchen-<slug>.pdf`).
-
-No data leaves your machine: the extension only reads the recipe page you are
-viewing and stores the extracted data briefly in `chrome.storage.local` while
-the print tab opens.
-
-### Running the extension tests
-
-The extension has a Node-based smoke test that validates the DOM-extraction
-logic against synthetic recipe fixtures (no Edge required):
-
-```powershell
-cd edge-extension
-npm install
-npm test
-```
-
-Requires Node.js 18+ (uses `node:test` plus `jsdom` as a dev dependency).
 
 ## Project layout
 
