@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <title>Test recept &ndash; 24Kitchen</title>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "name": "Test recept page"
+      },
+      {
+        "@type": "Recipe",
+        "name": "Test recept",
+        "description": "JSON-LD beschrijving die als fallback dient.",
+        "recipeYield": "4 porties",
+        "image": { "url": "https://example.com/hero.jpg" },
+        "recipeInstructions": [
+          { "@type": "HowToStep", "text": "Fallback stap een." },
+          { "@type": "HowToStep", "text": "Fallback stap twee." }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <div class="clearfix text-formatted field field--name-field-summary field--type-text-long field--label-hidden field__item">
+    Dit is een korte beschrijving van het recept.
+  </div>
+
+  <div class="meta--recipe-time text-xs"><span class="text">20 min</span></div>
+  <div class="meta--recipe-time text-xs"><span class="text">40 min</span></div>
+  <div class="meta--recipe-time text-xs"><span class="text">10 min</span></div>
+
+  <p class="node-meta__item node-meta__created">
+    <time datetime="2024-05-12">12 mei 2024</time>
+  </p>
+
+  <h3 class="ingredient-list-title heading-xs">Hoofdgerecht</h3>
+  <ul class="stripped list-recipe-ingredients">
+    <li><label>2 uien</label></li>
+    <li><label>300 g rundvlees</label></li>
+  </ul>
+
+  <h3 class="ingredient-list-title heading-xs">Saus</h3>
+  <ul class="stripped list-recipe-ingredients">
+    <li><label>200 ml rode wijn</label></li>
+  </ul>
+
+  <div class="field field--name-field-program field--type-entity-reference field--label-hidden field__item">
+    <div class="node node--type-program node--view-mode-sidebar node--program--sidebar full-clickable">
+      <div class="textual">
+        <h2 class="full-click-link lnk--with-chevron lnk--with-spacing heading">
+          <span class="default__text heading-s">Dit recept komt voor in het programma:</span>
+          <a class="full-click-link" href="/programmas/de-brigade">
+            <span class="program__text heading-m">
+              <span class="field field--name-title field--type-string field--label-hidden">De Brigade</span>
+            </span>
+          </a>
+        </h2>
+      </div>
+    </div>
+  </div>
+
+  <h2 id="ingredients" class="section-title heading-s">Benodigdheden</h2>
+  <ul class="content-list list--col1">
+    <li>
+      <div class="field field--name-field-plain-text-short field--type-string field--label-hidden field__item">Braadpan</div>
+    </li>
+    <li>
+      <div class="field field--name-field-plain-text-short field--type-string field--label-hidden field__item">Houten lepel</div>
+    </li>
+  </ul>
+
+  <h3 class="ingredient-list-title heading-s">Bereiding hoofdgerecht</h3>
+  <ol class="field field--name-field-preparation-steps field--type-entity-reference-revisions field--label-hidden list--prepration-steps">
+    <li>
+      <div class="clearfix text-formatted field field--name-field-text field--type-text-long field--label-hidden field__item">Snijd de uien fijn.</div>
+    </li>
+    <li>
+      <div class="clearfix text-formatted field field--name-field-text field--type-text-long field--label-hidden field__item">Bak het vlees rondom bruin.</div>
+    </li>
+  </ol>
+
+  <h3 class="ingredient-list-title heading-s">Bereiding saus</h3>
+  <ol class="field field--name-field-preparation-steps field--type-entity-reference-revisions field--label-hidden list--prepration-steps">
+    <li>
+      <div class="clearfix text-formatted field field--name-field-text field--type-text-long field--label-hidden field__item">Blus af met rode wijn.</div>
+    </li>
+  </ol>
+</body>
+</html>

@@ -52,6 +52,18 @@ class RecipeData:
     sections: List[IngredientSection]
     equipment: List[str]
     preparation_sections: List[PreparationSection]
+    program_name: str = ""
+    program_url: str = ""
+    source_url: str = ""
+
+
+SITE_BASE_URL = "https://www.24kitchen.nl"
+
+
+def resolve_site_url(href: str) -> str:
+    if href.startswith("/"):
+        return f"{SITE_BASE_URL}{href}"
+    return href
 
 
 def clean_text(value: str) -> str:
@@ -154,6 +166,19 @@ def load_recipe(html_path: Path) -> RecipeData:
             )
         )
 
+    program_name = ""
+    program_url = ""
+    program_match = re.search(
+        r'<div class="field field--name-field-program[^"]*">.*?'
+        r'<a class="full-click-link" href="([^"]+)">.*?'
+        r'<span class="field field--name-title[^"]*">(.*?)</span>',
+        html_text,
+        re.DOTALL,
+    )
+    if program_match:
+        program_url = resolve_site_url(program_match.group(1))
+        program_name = clean_text(program_match.group(2))
+
     return RecipeData(
         title=clean_text(recipe["name"]),
         summary=summary,
@@ -166,6 +191,8 @@ def load_recipe(html_path: Path) -> RecipeData:
         sections=sections,
         equipment=equipment,
         preparation_sections=preparation_sections,
+        program_name=program_name,
+        program_url=program_url,
     )
 
 
@@ -258,6 +285,26 @@ def build_styles():
             textColor=colors.HexColor("#e05a2a"),
             spaceBefore=6,
             spaceAfter=6,
+        )
+    )
+    styles.add(
+        ParagraphStyle(
+            name="ProgramLine",
+            parent=styles["BodyText"],
+            fontName="Helvetica",
+            fontSize=10.5,
+            leading=14,
+            textColor=colors.HexColor("#23322d"),
+        )
+    )
+    styles.add(
+        ParagraphStyle(
+            name="SourceFooter",
+            parent=styles["BodyText"],
+            fontName="Helvetica",
+            fontSize=9,
+            leading=12,
+            textColor=colors.HexColor("#23322d"),
         )
     )
     return styles
@@ -361,7 +408,17 @@ def build_pdf(recipe: RecipeData, hero_path: Path, logo_path: Path, output_path:
 
     if recipe.published:
         story.append(Paragraph(f"Gepubliceerd op: {recipe.published}", styles["BodySmall"]))
+        story.append(Spacer(1, 2 * mm))
+
+    if recipe.program_name:
+        program_text = (
+            '<b><font color="#134c3d">Dit recept komt voor in het programma:</font></b> '
+            f'<a href="{recipe.program_url}" color="#e05a2a"><b>{recipe.program_name}</b></a>'
+        )
+        story.append(Paragraph(program_text, styles["ProgramLine"]))
         story.append(Spacer(1, 5 * mm))
+    elif recipe.published:
+        story.append(Spacer(1, 3 * mm))
 
     cards = [ingredient_card(section, styles, 84) for section in recipe.sections]
     if cards:
@@ -413,6 +470,13 @@ def build_pdf(recipe: RecipeData, hero_path: Path, logo_path: Path, output_path:
 
     story.append(KeepTogether(preparation_flowables))
 
+    if recipe.source_url:
+        story.append(Spacer(1, 6 * mm))
+        source_text = (
+            f'Bron: <a href="{recipe.source_url}" color="#134c3d">{recipe.source_url}</a>'
+        )
+        story.append(Paragraph(source_text, styles["SourceFooter"]))
+
     doc.build(story)
 
 
@@ -422,9 +486,12 @@ def main() -> None:
     parser.add_argument("--hero", required=True)
     parser.add_argument("--logo", required=True)
     parser.add_argument("--output", required=True)
+    parser.add_argument("--source-url", default="")
     args = parser.parse_args()
 
     recipe = load_recipe(Path(args.html))
+    if args.source_url:
+        recipe.source_url = args.source_url
     build_pdf(recipe, Path(args.hero), Path(args.logo), Path(args.output))
 
 

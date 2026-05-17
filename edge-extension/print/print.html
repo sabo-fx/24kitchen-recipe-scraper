@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>24Kitchen recept</title>
+  <link rel="stylesheet" href="print.css" />
+</head>
+<body>
+  <div class="toolbar no-print" id="toolbar">
+    <button id="print-btn" type="button">Opslaan als PDF</button>
+    <span class="hint">Kies <strong>"Opslaan als PDF"</strong> in het printdialoog.</span>
+  </div>
+
+  <main class="page" id="page">
+    <header class="brand">
+      <img id="logo" src="https://www.24kitchen.nl/themes/kitchen/24k-logo.png" alt="24Kitchen" />
+      <p class="kicker">24Kitchen receptkopie</p>
+    </header>
+
+    <h1 id="title"></h1>
+    <p id="summary" class="intro"></p>
+
+    <table class="meta-bar" id="meta-bar">
+      <tr>
+        <td><span class="meta-label">Porties</span><br /><span id="meta-yield"></span></td>
+        <td><span class="meta-label">Voorbereiden</span><br /><span id="meta-prep"></span></td>
+        <td><span class="meta-label">Oventijd</span><br /><span id="meta-cook"></span></td>
+        <td><span class="meta-label">Wachttijd</span><br /><span id="meta-wait"></span></td>
+      </tr>
+    </table>
+
+    <img id="hero" class="hero" alt="" />
+
+    <p id="published" class="published"></p>
+
+    <p id="program" class="program" hidden>
+      <span class="program-label">Dit recept komt voor in het programma:</span>
+      <a id="program-link" href="#"></a>
+    </p>
+
+    <section id="ingredients-section" hidden>
+      <h2>Ingrediënten</h2>
+      <div id="ingredient-cards"></div>
+    </section>
+
+    <section id="equipment-section" hidden>
+      <h2>Benodigdheden</h2>
+      <div id="equipment-card"></div>
+    </section>
+
+    <section id="prep-section" hidden>
+      <h2>Bereiding</h2>
+      <div id="prep-blocks"></div>
+    </section>
+
+    <footer id="source-footer" class="source-footer" hidden>
+      Bron: <a id="source-link" href="#"></a>
+    </footer>
+  </main>
+
+  <script src="print.js"></script>
+</body>
+</html>

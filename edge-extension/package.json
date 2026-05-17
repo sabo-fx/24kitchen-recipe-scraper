@@ -1,0 +1,13 @@
+{
+  "name": "24kitchen-pdf-extension",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Edge extension that adds a Download als PDF button to 24kitchen.nl recipe pages.",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/smoke-test.mjs"
+  },
+  "devDependencies": {
+    "jsdom": "^25.0.1"
+  }
+}

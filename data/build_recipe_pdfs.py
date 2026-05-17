@@ -79,6 +79,7 @@ def process_url(url: str, output_dir: Path, assets_dir: Path, logo_path: Path, k
     try:
         html_path.write_bytes(download_bytes(url))
         recipe = load_recipe(html_path)
+        recipe.source_url = url
         hero_ext = extension_from_url(recipe.hero_url, ".jpg")
         hero_path = assets_dir / f"{base_name}-hero{hero_ext}"
         ensure_download(recipe.hero_url, hero_path)

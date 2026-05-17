@@ -80,6 +80,48 @@ python .\data\render_recipe_pdf.py `
   --output .\recipe.pdf
 ```
 
+## Edge extension
+
+For one-off recipes you can use the bundled Microsoft Edge extension in
+`edge-extension/` instead of running the PowerShell pipeline. It injects a
+**Download als PDF** button on every `24kitchen.nl/recepten/...` page, opens a
+print-styled A4 layout that mirrors the ReportLab output, and lets the browser
+save it with **"Opslaan als PDF"**.
+
+### Install (unpacked)
+
+1. Open `edge://extensions` in Microsoft Edge.
+2. Toggle **Developer mode** on (bottom-left).
+3. Click **Load unpacked** and select the `edge-extension/` folder from this
+   repository.
+4. The extension is now active for `https://www.24kitchen.nl/*`.
+
+### Use
+
+1. Open any recipe page, e.g.
+   `https://www.24kitchen.nl/recepten/boeuf-bourguignon-met-shiitakes-en-szechuan`.
+2. Click the orange **Download als PDF** button in the bottom-right corner.
+3. A new tab opens with the formatted recipe and Edge's print dialog appears
+   automatically. Pick **Save as PDF** as the destination and save the file.
+   The default filename matches the PowerShell output (`24kitchen-<slug>.pdf`).
+
+No data leaves your machine: the extension only reads the recipe page you are
+viewing and stores the extracted data briefly in `chrome.storage.local` while
+the print tab opens.
+
+### Running the extension tests
+
+The extension has a Node-based smoke test that validates the DOM-extraction
+logic against synthetic recipe fixtures (no Edge required):
+
+```powershell
+cd edge-extension
+npm install
+npm test
+```
+
+Requires Node.js 18+ (uses `node:test` plus `jsdom` as a dev dependency).
+
 ## Project layout
 
 ```
@@ -88,6 +130,8 @@ recipe-urls.txt             Input list of recipe URLs
 data/build_recipe_pdfs.py   Batch driver: downloads HTML + hero images
 data/render_recipe_pdf.py   HTML/JSON-LD parser + ReportLab PDF layout
 reports/                    Generated PDFs (gitignored)
+edge-extension/             Microsoft Edge MV3 extension (Download als PDF)
+edge-extension/tests/       Node-based smoke test for the extraction logic
 ```
 
 ## Notes & disclaimer
