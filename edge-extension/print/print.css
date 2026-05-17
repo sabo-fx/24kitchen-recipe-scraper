@@ -245,6 +245,12 @@ section h2 {
 @page {
   size: A4;
   margin: 16mm 18mm;
+  @bottom-right {
+    content: "Page " counter(page) " of " counter(pages);
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 9pt;
+    color: #23322d;
+  }
 }
 
 @media print {

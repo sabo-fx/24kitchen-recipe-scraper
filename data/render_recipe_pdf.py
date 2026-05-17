@@ -13,6 +13,7 @@ from reportlab.lib.enums import TA_LEFT
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import mm
+from reportlab.pdfgen import canvas
 from reportlab.platypus import (
     Image,
     KeepTogether,
@@ -25,6 +26,34 @@ from reportlab.platypus import (
     Table,
     TableStyle,
 )
+
+
+class NumberedCanvas(canvas.Canvas):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._saved_page_states = []
+
+    def showPage(self):
+        self._saved_page_states.append(dict(self.__dict__))
+        self._startPage()
+
+    def save(self):
+        page_count = len(self._saved_page_states)
+        for state in self._saved_page_states:
+            self.__dict__.update(state)
+            self._draw_page_number(page_count)
+            super().showPage()
+        super().save()
+
+    def _draw_page_number(self, page_count: int) -> None:
+        page_width, _ = self._pagesize
+        self.setFont("Helvetica", 9)
+        self.setFillColor(colors.HexColor("#23322d"))
+        self.drawRightString(
+            page_width - 18 * mm,
+            10 * mm,
+            f"Page {self._pageNumber} of {page_count}",
+        )
 
 
 @dataclass
@@ -477,7 +506,7 @@ def build_pdf(recipe: RecipeData, hero_path: Path, logo_path: Path, output_path:
         )
         story.append(Paragraph(source_text, styles["SourceFooter"]))
 
-    doc.build(story)
+    doc.build(story, canvasmaker=NumberedCanvas)
 
 
 def main() -> None:
