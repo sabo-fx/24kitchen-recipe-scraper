@@ -2,6 +2,20 @@
   "manifest_version": 3,
   "name": "24Kitchen Recipe to PDF",
   "version": "1.0.0",
+   "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
   "description": "Adds a 'Download als PDF' button to 24kitchen.nl recipe pages and renders a printable A4 layout.",
   "permissions": ["storage", "scripting"],
   "host_permissions": ["https://www.24kitchen.nl/*"],
