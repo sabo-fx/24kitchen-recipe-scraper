@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+
+# Vendored Python dependencies (installed locally for the embedded runtime)
+data/pydeps/
+
+# Generated output
+reports/*.pdf
+data/streaming-report-items.json
+
+# Editor / OS
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store

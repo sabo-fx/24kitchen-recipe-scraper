@@ -1,0 +1,6 @@
+# Zet hier één 24Kitchen recept-URL per regel.
+# Lege regels en regels die met # beginnen worden overgeslagen.
+
+https://www.24kitchen.nl/recepten/5-spice-madeleines-met-yuzu-sabayon
+https://www.24kitchen.nl/recepten/boeuf-bourguignon-met-shiitakes-en-szechuan
+https://www.24kitchen.nl/recepten/3-bereidingen-van-asperges
