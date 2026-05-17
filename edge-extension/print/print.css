@@ -163,6 +163,8 @@ section h2 {
   font-size: 15pt;
   line-height: 1.2;
   color: var(--green-deep);
+  break-after: avoid-page;
+  page-break-after: avoid;
 }
 
 /* ---------- Cards ---------- */
