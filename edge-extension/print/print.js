@@ -43,11 +43,21 @@ function escapeHtml(value) {
   return String(value).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
 
+function setFooterTitle(title) {
+  const text = String(title || "").trim();
+  if (!text) return;
+  const style = document.createElement("style");
+  style.id = "footer-title-style";
+  style.textContent = `@page { @bottom-center { content: ${JSON.stringify(text)}; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 9pt; color: #9a9a9a; } }`;
+  document.head.appendChild(style);
+}
+
 function populate(data) {
   document.title = `24kitchen-${data.slug || "recept"}`;
 
   setText("title", data.title);
   setText("summary", data.summary);
+  setFooterTitle(data.title);
   setText("meta-yield", data.yieldText);
   setText("meta-prep", data.prepTime);
   setText("meta-cook", data.cookTime);

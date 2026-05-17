@@ -29,6 +29,8 @@ from reportlab.platypus import (
 
 
 class NumberedCanvas(canvas.Canvas):
+    recipe_title: str = ""
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._saved_page_states = []
@@ -41,19 +43,30 @@ class NumberedCanvas(canvas.Canvas):
         page_count = len(self._saved_page_states)
         for state in self._saved_page_states:
             self.__dict__.update(state)
-            self._draw_page_number(page_count)
+            self._draw_footer(page_count)
             super().showPage()
         super().save()
 
-    def _draw_page_number(self, page_count: int) -> None:
+    def _draw_footer(self, page_count: int) -> None:
         page_width, _ = self._pagesize
         self.setFont("Helvetica", 9)
+        if self.recipe_title:
+            self.setFillColor(colors.HexColor("#9a9a9a"))
+            self.drawCentredString(page_width / 2, 10 * mm, self.recipe_title)
         self.setFillColor(colors.HexColor("#23322d"))
         self.drawRightString(
             page_width - 18 * mm,
             10 * mm,
             f"Page {self._pageNumber} of {page_count}",
         )
+
+
+def make_numbered_canvas(recipe_title: str):
+    return type(
+        "TitledNumberedCanvas",
+        (NumberedCanvas,),
+        {"recipe_title": recipe_title},
+    )
 
 
 @dataclass
@@ -506,7 +519,7 @@ def build_pdf(recipe: RecipeData, hero_path: Path, logo_path: Path, output_path:
         )
         story.append(Paragraph(source_text, styles["SourceFooter"]))
 
-    doc.build(story, canvasmaker=NumberedCanvas)
+    doc.build(story, canvasmaker=make_numbered_canvas(recipe.title))
 
 
 def main() -> None:
